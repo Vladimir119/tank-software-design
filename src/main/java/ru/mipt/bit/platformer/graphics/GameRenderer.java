@@ -1,35 +1,30 @@
 package ru.mipt.bit.platformer.graphics;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.model.*;
-import ru.mipt.bit.platformer.util.TileMovement;
-
-import java.util.List;
-
-import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
-public final class GameRenderer implements AutoCloseable {
+public final class GameRenderer implements GameView {
     private final SpriteBatch batch = new SpriteBatch();
-    private final TiledMap map = new TmxMapLoader().load("level.tmx");
-    private final TiledMapTileLayer layer = getSingleLayer(map);
-    private final OrthogonalTiledMapRenderer ground =
-            (OrthogonalTiledMapRenderer) createSingleLayerMapRenderer(map, batch);
-    private final TankRenderer tankRenderer = new TankRenderer(layer);
-    private final TreeRenderer treeRenderer = new TreeRenderer(layer);
+    private final TiledMap map;
+    private final TiledMapTileLayer layer;
+    private final OrthogonalTiledMapRenderer ground;
+    private final TankRenderer tankRenderer;
+    private final TreeRenderer treeRenderer;
+
+    public GameRenderer(String mapPath, String tankPath, String treePath) {
+        map = new TmxMapLoader().load(mapPath);
+        layer = getSingleLayer(map);
+        ground = (OrthogonalTiledMapRenderer) createSingleLayerMapRenderer(map, batch);
+        tankRenderer = new TankRenderer(layer, tankPath);
+        treeRenderer = new TreeRenderer(layer, treePath);
+    }
 
     public void draw(Field field, Tank tank) {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);

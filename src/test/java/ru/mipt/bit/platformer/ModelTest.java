@@ -45,11 +45,11 @@ class ModelTest {
         assertThrows(IllegalArgumentException.class, () -> new Field(0, 1, List.of()));
         assertThrows(IllegalArgumentException.class, () -> new Field(2, 2, List.of(new Tree(new Cell(2, 0)))));
         assertThrows(NullPointerException.class, () -> new Tree(null));
-        assertThrows(NullPointerException.class, () -> new Tank(null));
+        assertThrows(NullPointerException.class, () -> new Tank(null, 0.4f));
     }
 
     @Test void tankFinishesOneMoveBeforeAcceptingAnother() {
-        Tank tank = new Tank(new Cell(1, 1));
+        Tank tank = new Tank(new Cell(1, 1), 0.4f);
         Field field = new Field(4, 4, List.of());
         tank.move(Direction.UP, field);
         tank.update(0.2f);
@@ -67,7 +67,7 @@ class ModelTest {
     }
 
     @Test void blockedTankTurnsWithoutMoving() {
-        Tank tank = new Tank(new Cell(0, 0));
+        Tank tank = new Tank(new Cell(0, 0), 0.4f);
         Field field = new Field(2, 2, List.of(new Tree(new Cell(0, 1))));
         tank.move(Direction.UP, field);
         assertEquals(Direction.UP, tank.direction());
@@ -79,7 +79,7 @@ class ModelTest {
     }
 
     @Test void invalidTimeDoesNotCorruptMovement() {
-        Tank tank = new Tank(new Cell(0, 0));
+        Tank tank = new Tank(new Cell(0, 0), 0.4f);
         for (float delta : new float[] {-1, Float.NaN, Float.POSITIVE_INFINITY}) {
             assertThrows(IllegalArgumentException.class, () -> tank.update(delta));
         }

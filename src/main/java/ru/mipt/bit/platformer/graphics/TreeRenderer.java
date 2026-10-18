@@ -11,13 +11,16 @@ import ru.mipt.bit.platformer.model.Tree;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
 public final class TreeRenderer implements AutoCloseable {
-    private final Texture texture = new Texture("images/greenTree.png");
-    private final TextureRegion image = new TextureRegion(texture);
-    private final Rectangle bounds = createBoundingRectangle(image);
+    private final Texture texture;
+    private final TextureRegion image;
+    private final Rectangle bounds;
     private final GridPoint2 position = new GridPoint2();
     private final TiledMapTileLayer layer;
 
-    public TreeRenderer(TiledMapTileLayer layer) { this.layer = layer; }
+    public TreeRenderer(TiledMapTileLayer layer, String texturePath) {
+        texture = new Texture(texturePath);
+        image = new TextureRegion(texture);
+        bounds = createBoundingRectangle(image); this.layer = layer; }
 
     public void draw(Batch batch, Tree tree) {
         position.set(tree.position().x(), tree.position().y());
