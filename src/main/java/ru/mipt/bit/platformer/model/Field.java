@@ -2,7 +2,7 @@ package ru.mipt.bit.platformer.model;
 
 import java.util.List;
 
-public final class Field {
+public final class Field implements MovementPolicy {
     private final int width;
     private final int height;
     private final List<Tree> trees;

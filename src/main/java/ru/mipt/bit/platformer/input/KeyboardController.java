@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.IntPredicate;
 
-public final class KeyboardController {
+public final class KeyboardController implements InputHandler {
     private final IntPredicate pressed;
     private final Map<Integer, Runnable> bindings = new LinkedHashMap<>();
 
