@@ -13,3 +13,11 @@ Windows: `gradlew.bat run`. В IDE — Gradle → application → run.
 
 Выделены Tank, Tree, Field и Direction. Проверка движения общая для всех
 направлений, состояние танка хранится отдельно от его текстуры.
+
+## Задание 2
+
+Модели не зависят от LibGDX. GameRenderer, TankRenderer и TreeRenderer отвечают
+за графику. KeyboardController получает источник нажатий и привязки действий;
+новую команду можно добавить через bind. Launcher связывает компоненты.
+
+Проверка: `./gradlew test` (Windows: `gradlew.bat test`).
