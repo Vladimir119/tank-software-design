@@ -9,7 +9,6 @@ import ru.mipt.bit.platformer.input.KeyboardController;
 import ru.mipt.bit.platformer.level.*;
 import ru.mipt.bit.platformer.model.*;
 
-import java.util.List;
 import java.util.Objects;
 import static com.badlogic.gdx.Input.Keys.*;
 
@@ -26,11 +25,8 @@ public final class GameDesktopLauncher extends ApplicationAdapter {
     @Override
     public void create() {
         LevelData level = levels.load();
-        GameRenderer renderer = new GameRenderer("level.tmx", "images/tank_blue.png", "images/greenTree.png");
-        if (level.field().width() != renderer.width() || level.field().height() != renderer.height()) {
-            renderer.close();
-            throw new IllegalArgumentException("Level dimensions must match the ground map");
-        }
+        GameRenderer renderer = new GameRenderer("level.tmx", "images/tank_blue.png", "images/greenTree.png",
+                level.field().width(), level.field().height());
         Tank tank = new Tank(level.spawn(), moveDuration);
         KeyboardController keyboard = new KeyboardController(key -> Gdx.input.isKeyPressed(key));
         bindMovement(keyboard, tank, level.field(), Direction.UP, UP, W);
@@ -52,8 +48,7 @@ public final class GameDesktopLauncher extends ApplicationAdapter {
     public void dispose() { if (session != null) session.close(); }
 
     public static void main(String[] args) {
-        LevelSource source = new FixedLevelSource(new LevelData(
-                new Field(10, 8, List.of(new Tree(new Cell(1, 3)))), new Cell(1, 1)));
+        LevelSource source = LaunchOptions.parse(args).source();
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setWindowedMode(1280, 1024);
         new Lwjgl3Application(new GameDesktopLauncher(source, 0.4f), config);
