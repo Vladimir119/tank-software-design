@@ -5,11 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import ru.mipt.bit.platformer.graphics.GameRenderer;
-import ru.mipt.bit.platformer.input.KeyboardController;
+import ru.mipt.bit.platformer.input.*;
 import ru.mipt.bit.platformer.level.*;
 import ru.mipt.bit.platformer.model.*;
 
-import java.util.Objects;
+import java.util.*;
 import static com.badlogic.gdx.Input.Keys.*;
 
 public final class GameDesktopLauncher extends ApplicationAdapter {
@@ -27,18 +27,27 @@ public final class GameDesktopLauncher extends ApplicationAdapter {
         LevelData level = levels.load();
         GameRenderer renderer = new GameRenderer("level.tmx", "images/tank_blue.png", "images/greenTree.png",
                 level.field().width(), level.field().height());
-        Tank tank = new Tank(level.spawn(), moveDuration);
+        Random random = new Random();
+        List<Tank> tanks = new TankSpawner(random).spawn(level, 5, moveDuration);
+        TankMovement movement = new TankMovement(level.field(), tanks);
+        Tank player = tanks.get(0);
         KeyboardController keyboard = new KeyboardController(key -> Gdx.input.isKeyPressed(key));
-        bindMovement(keyboard, tank, level.field(), Direction.UP, UP, W);
-        bindMovement(keyboard, tank, level.field(), Direction.LEFT, LEFT, A);
-        bindMovement(keyboard, tank, level.field(), Direction.DOWN, DOWN, S);
-        bindMovement(keyboard, tank, level.field(), Direction.RIGHT, RIGHT, D);
-        session = new GameSession(level.field(), tank, keyboard, renderer);
+        bindMovement(keyboard, player, movement, Direction.UP, UP, W);
+        bindMovement(keyboard, player, movement, Direction.LEFT, LEFT, A);
+        bindMovement(keyboard, player, movement, Direction.DOWN, DOWN, S);
+        bindMovement(keyboard, player, movement, Direction.RIGHT, RIGHT, D);
+        List<ControlStrategy> controls = new ArrayList<>();
+        controls.add(keyboard);
+        for (int i = 1; i < tanks.size(); i++) {
+            controls.add(new RandomController(tanks.get(i), movement, random));
+        }
+        session = new GameSession(level.field(), tanks, controls, renderer);
     }
 
     private static void bindMovement(KeyboardController keyboard, Tank tank, MovementPolicy movement,
                                      Direction direction, int... keys) {
-        for (int key : keys) keyboard.bind(key, () -> tank.move(direction, movement));
+        Command command = new MoveCommand(tank, direction, movement);
+        for (int key : keys) keyboard.bind(key, command);
     }
 
     @Override

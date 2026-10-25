@@ -27,18 +27,18 @@ class CompositionTest {
         Tank tank = new Tank(new Cell(0, 0), 0.4f);
         List<String> events = new ArrayList<>();
         GameView view = new GameView() {
-            public void draw(Field actualField, Tank actualTank) {
+            public void draw(Field actualField, List<Tank> actualTanks) {
                 assertSame(field, actualField);
-                assertSame(tank, actualTank);
+                assertEquals(List.of(tank), actualTanks);
                 assertEquals(new Cell(1, 0), tank.position());
                 events.add("draw");
             }
             public void close() { events.add("close"); }
         };
-        try (GameSession session = new GameSession(field, tank, () -> {
+        try (GameSession session = new GameSession(field, List.of(tank), List.of(() -> {
             events.add("input");
             tank.move(Direction.RIGHT, field);
-        }, view)) {
+        }), view)) {
             session.update(0.4f);
         }
         assertEquals(List.of("input", "draw", "close"), events);

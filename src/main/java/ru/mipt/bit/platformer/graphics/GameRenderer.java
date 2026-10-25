@@ -1,5 +1,7 @@
 package ru.mipt.bit.platformer.graphics;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -38,7 +40,7 @@ public final class GameRenderer implements GameView {
         viewport = new FitViewport(width * layer.getTileWidth(), height * layer.getTileHeight());
     }
 
-    public void draw(Field field, Tank tank) {
+    public void draw(Field field, List<Tank> tanks) {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
@@ -47,7 +49,12 @@ public final class GameRenderer implements GameView {
         batch.setProjectionMatrix(viewport.getCamera().combined);
         ground.render();
         batch.begin();
-        tankRenderer.draw(batch, tank);
+        for (int i = 0; i < tanks.size(); i++) {
+            if (i == 0) batch.setColor(1, 1, 1, 1);
+            else batch.setColor(1, 0.55f, 0.55f, 1);
+            tankRenderer.draw(batch, tanks.get(i));
+        }
+        batch.setColor(1, 1, 1, 1);
         for (Tree tree : field.trees()) treeRenderer.draw(batch, tree);
         batch.end();
     }

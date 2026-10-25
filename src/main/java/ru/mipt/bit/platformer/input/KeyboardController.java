@@ -5,21 +5,21 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.IntPredicate;
 
-public final class KeyboardController implements InputHandler {
+public final class KeyboardController implements ControlStrategy {
     private final IntPredicate pressed;
-    private final Map<Integer, Runnable> bindings = new LinkedHashMap<>();
+    private final Map<Integer, Command> bindings = new LinkedHashMap<>();
 
     public KeyboardController(IntPredicate pressed) {
         this.pressed = Objects.requireNonNull(pressed);
     }
 
-    public void bind(int key, Runnable action) {
+    public void bind(int key, Command action) {
         bindings.put(key, Objects.requireNonNull(action));
     }
 
     public void update() {
         bindings.forEach((key, action) -> {
-            if (pressed.test(key)) action.run();
+            if (pressed.test(key)) action.execute();
         });
     }
 }

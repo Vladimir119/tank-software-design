@@ -24,7 +24,7 @@ Windows: `gradlew.bat run`. В IDE — Gradle → application → run.
 
 ## Задание 3
 
-Tank зависит от MovementPolicy, GameSession — от InputHandler и GameView,
+Tank зависит от MovementPolicy, GameSession — от ControlStrategy и GameView,
 а приложение получает LevelSource. Правила перемещения, ввод, представление
 и источник уровня можно заменять без изменения игрового цикла. Длительность
 шага и пути ресурсов передаются в конструкторы. Тесты используют простые
