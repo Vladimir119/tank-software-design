@@ -13,10 +13,10 @@ class KeyboardControllerTest {
         keyboard.bind(1, () -> actions.add("move"));
         keyboard.bind(2, () -> actions.add("unused"));
         keyboard.bind(3, () -> actions.add("fire"));
-        keyboard.update();
+        keyboard.commands().forEach(ru.mipt.bit.platformer.input.Command::execute);
         assertEquals(List.of("move", "fire"), actions);
         pressed.clear();
-        keyboard.update();
+        keyboard.commands().forEach(ru.mipt.bit.platformer.input.Command::execute);
         assertEquals(2, actions.size());
     }
 
@@ -25,7 +25,7 @@ class KeyboardControllerTest {
         KeyboardController keyboard = new KeyboardController(key -> true);
         keyboard.bind(1, () -> actions.add("old"));
         keyboard.bind(1, () -> actions.add("new"));
-        keyboard.update();
+        keyboard.commands().forEach(ru.mipt.bit.platformer.input.Command::execute);
         assertEquals(List.of("new"), actions);
         assertThrows(NullPointerException.class, () -> keyboard.bind(2, null));
         assertThrows(NullPointerException.class, () -> new KeyboardController(null));

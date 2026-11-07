@@ -13,7 +13,7 @@ class TanksTest {
         Tank first = new Tank(new Cell(1, 1), 1);
         Tank second = new Tank(new Cell(0, 1), 1);
         Tank third = new Tank(new Cell(2, 2), 1);
-        TankMovement movement = new TankMovement(new Field(4, 4, List.of()), List.of(first, second, third));
+        GameWorld movement = new GameWorld(new Field(4, 4, List.of()), List.of(first, second, third));
         new MoveCommand(first, Direction.RIGHT, movement).execute();
         first.update(0.5f);
         assertFalse(movement.canEnter(new Cell(1, 1)));
@@ -32,7 +32,7 @@ class TanksTest {
     @Test void onlyFirstTankCanReserveAnEmptyCell() {
         Tank left = new Tank(new Cell(0, 0), 1);
         Tank right = new Tank(new Cell(2, 0), 1);
-        TankMovement movement = new TankMovement(new Field(3, 1, List.of()), List.of(left, right));
+        GameWorld movement = new GameWorld(new Field(3, 1, List.of()), List.of(left, right));
         new MoveCommand(left, Direction.RIGHT, movement).execute();
         new MoveCommand(right, Direction.LEFT, movement).execute();
         assertEquals(new Cell(1, 0), left.destination());
@@ -43,7 +43,7 @@ class TanksTest {
     @Test void tanksCannotSwapPlacesOrPassTreesAndBoundaries() {
         Tank first = new Tank(new Cell(0, 0), 1);
         Tank second = new Tank(new Cell(1, 0), 1);
-        TankMovement movement = new TankMovement(
+        GameWorld movement = new GameWorld(
                 new Field(2, 2, List.of(new Tree(new Cell(0, 1)))), List.of(first, second));
         for (Direction direction : Direction.values()) new MoveCommand(first, direction, movement).execute();
         new MoveCommand(second, Direction.LEFT, movement).execute();
@@ -62,13 +62,13 @@ class TanksTest {
             @Override public int nextInt(int bound) { calls[0]++; return Direction.UP.ordinal(); }
         };
         RandomController controller = new RandomController(tank, new Field(4, 4, List.of()), random);
-        controller.update();
+        controller.commands().forEach(ru.mipt.bit.platformer.input.Command::execute);
         tank.update(0.5f);
-        controller.update();
+        controller.commands().forEach(ru.mipt.bit.platformer.input.Command::execute);
         assertEquals(1, calls[0]);
         assertEquals(new Cell(1, 2), tank.destination());
         tank.update(0.5f);
-        controller.update();
+        controller.commands().forEach(ru.mipt.bit.platformer.input.Command::execute);
         assertEquals(2, calls[0]);
         assertEquals(new Cell(1, 3), tank.destination());
     }
@@ -82,9 +82,9 @@ class TanksTest {
             }
         };
         RandomController controller = new RandomController(tank, new Field(2, 2, List.of()), random);
-        controller.update();
+        controller.commands().forEach(ru.mipt.bit.platformer.input.Command::execute);
         assertEquals(1, tank.progress());
-        controller.update();
+        controller.commands().forEach(ru.mipt.bit.platformer.input.Command::execute);
         assertEquals(0, tank.progress());
         assertEquals(new Cell(0, 1), tank.destination());
     }
@@ -126,7 +126,7 @@ class TanksTest {
         Tank player = new Tank(new Cell(0, 0), 1);
         Tank bot = new Tank(new Cell(3, 0), 1);
         Field field = new Field(5, 5, List.of());
-        TankMovement movement = new TankMovement(field, List.of(player, bot));
+        GameWorld movement = new GameWorld(field, List.of(player, bot));
         Set<Integer> pressed = new HashSet<>();
         KeyboardController keyboard = new KeyboardController(pressed::contains);
         keyboard.bind(1, new MoveCommand(player, Direction.UP, movement));
@@ -135,12 +135,12 @@ class TanksTest {
         });
         List<List<Cell>> frames = new ArrayList<>();
         GameView view = new GameView() {
-            public void draw(Field actual, List<Tank> tanks) {
-                frames.add(tanks.stream().map(Tank::position).toList());
+            public void draw() {
+                frames.add(List.of(player, bot).stream().map(Tank::position).toList());
             }
             public void close() { }
         };
-        try (GameSession session = new GameSession(field, List.of(player, bot), List.of(keyboard, ai), view)) {
+        try (GameSession session = new GameSession(new GameWorld(field, List.of(player, bot)), List.of(keyboard, ai), view)) {
             session.update(1);
             assertEquals(List.of(new Cell(0, 0), new Cell(3, 1)), frames.get(0));
             pressed.add(1);
@@ -156,12 +156,12 @@ class TanksTest {
     @Test void manyAiStepsNeverOverlapReservations() {
         LevelData level = new LevelData(new Field(8, 6, List.of(new Tree(new Cell(2, 2)))), new Cell(0, 0));
         List<Tank> tanks = new TankSpawner(new Random(9)).spawn(level, 20, 0.4f);
-        TankMovement movement = new TankMovement(level.field(), tanks);
+        GameWorld movement = new GameWorld(level.field(), tanks);
         List<ControlStrategy> controls = new ArrayList<>();
         for (int i = 1; i < tanks.size(); i++) controls.add(new RandomController(tanks.get(i), movement, new Random(i)));
         for (int frame = 0; frame < 1000; frame++) {
             for (ControlStrategy control : controls) {
-                control.update();
+                control.commands().forEach(ru.mipt.bit.platformer.input.Command::execute);
                 assertNoOverlap(tanks, level.field());
             }
             for (Tank tank : tanks) tank.update(0.07f);

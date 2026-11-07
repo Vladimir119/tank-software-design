@@ -1,6 +1,8 @@
 package ru.mipt.bit.platformer.graphics;
 
-import java.util.List;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -22,8 +24,18 @@ public final class GameRenderer implements GameView {
     private final TankRenderer tankRenderer;
     private final TreeRenderer treeRenderer;
     private final FitViewport viewport;
+    private final SceneObjects scene;
+    private final Tank player;
+    private final Texture bulletTexture;
 
-    public GameRenderer(String mapPath, String tankPath, String treePath, int width, int height) {
+    public GameRenderer(String mapPath, String tankPath, String treePath, int width, int height, SceneObjects scene, Tank player) {
+        this.scene = scene;
+        this.player = player;
+        Pixmap pixel = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixel.setColor(1, 1, 1, 1);
+        pixel.fill();
+        bulletTexture = new Texture(pixel);
+        pixel.dispose();
         map = new TmxMapLoader().load(mapPath);
         TiledMapTileLayer original = getSingleLayer(map);
         layer = new TiledMapTileLayer(width, height, original.getTileWidth(), original.getTileHeight());
@@ -40,7 +52,7 @@ public final class GameRenderer implements GameView {
         viewport = new FitViewport(width * layer.getTileWidth(), height * layer.getTileHeight());
     }
 
-    public void draw(Field field, List<Tank> tanks) {
+    public void draw() {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
@@ -49,21 +61,34 @@ public final class GameRenderer implements GameView {
         batch.setProjectionMatrix(viewport.getCamera().combined);
         ground.render();
         batch.begin();
-        for (int i = 0; i < tanks.size(); i++) {
-            if (i == 0) batch.setColor(1, 1, 1, 1);
-            else batch.setColor(1, 0.55f, 0.55f, 1);
-            tankRenderer.draw(batch, tanks.get(i));
+        for (GameObject object : scene.objects()) {
+            if (object instanceof Tank tank) {
+                if (tank == player) batch.setColor(1, 1, 1, 1);
+                else batch.setColor(1, 0.55f, 0.55f, 1);
+                tankRenderer.draw(batch, tank);
+            } else if (object instanceof Tree tree) {
+                batch.setColor(1, 1, 1, 1);
+                treeRenderer.draw(batch, tree);
+            } else if (object instanceof Bullet bullet) {
+                batch.setColor(1, 0.85f, 0.1f, 1);
+                float x = (bullet.position().x() + 0.5f + bullet.direction().dx() * bullet.progress()) * tileWidth();
+                float y = (bullet.position().y() + 0.5f + bullet.direction().dy() * bullet.progress()) * tileHeight();
+                batch.draw(bulletTexture, x - 7, y - 7, 14, 14);
+            }
         }
         batch.setColor(1, 1, 1, 1);
-        for (Tree tree : field.trees()) treeRenderer.draw(batch, tree);
         batch.end();
     }
 
+    public Camera camera() { return viewport.getCamera(); }
+    public int tileWidth() { return layer.getTileWidth(); }
+    public int tileHeight() { return layer.getTileHeight(); }
     public int width() { return layer.getWidth(); }
     public int height() { return layer.getHeight(); }
 
     @Override
     public void close() {
+        bulletTexture.dispose();
         treeRenderer.close();
         tankRenderer.close();
         ground.dispose();
