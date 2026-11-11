@@ -1,10 +1,12 @@
 package ru.mipt.bit.platformer;
 
-import ru.mipt.bit.platformer.graphics.GameView;
+import ru.mipt.bit.platformer.application.port.ControlStrategy;
+import ru.mipt.bit.platformer.application.port.GameView;
 import ru.mipt.bit.platformer.input.*;
 import ru.mipt.bit.platformer.model.GameWorld;
 import java.util.*;
 
+/** Application: runs command collection, execution, world update and rendering. */
 public final class GameSession implements AutoCloseable {
     private final GameWorld world;
     private final List<ControlStrategy> controls;

@@ -10,6 +10,7 @@ import ru.mipt.bit.platformer.model.Tree;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
+/** Infrastructure: LibGDX drawing of a tree. */
 public final class TreeRenderer implements AutoCloseable {
     private final Texture texture;
     private final TextureRegion image;

@@ -2,7 +2,8 @@ package ru.mipt.bit.platformer.model;
 
 import java.util.*;
 
-public final class GameWorld implements MovementPolicy {
+/** Domain service: implements WorldAccess and publishes object changes. */
+public final class GameWorld implements WorldAccess {
     private final Field field;
     private final List<GameObject> objects = new ArrayList<>();
     private final List<WorldListener> listeners = new ArrayList<>();

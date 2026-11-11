@@ -2,6 +2,7 @@ package ru.mipt.bit.platformer.model;
 
 import java.util.List;
 
+/** Domain: field dimensions and initial obstacles. */
 public final class Field implements MovementPolicy {
     private final int width;
     private final int height;

@@ -1,10 +1,12 @@
 package ru.mipt.bit.platformer.graphics;
 
+import ru.mipt.bit.platformer.application.port.GameView;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import ru.mipt.bit.platformer.model.*;
 
+/** Infrastructure output adapter: decorates GameView with health bars. */
 public final class HealthBarView implements GameView {
     private final GameView base;
     private final SceneObjects scene;

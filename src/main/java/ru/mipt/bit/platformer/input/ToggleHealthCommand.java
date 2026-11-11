@@ -3,6 +3,7 @@ package ru.mipt.bit.platformer.input;
 import ru.mipt.bit.platformer.model.HealthDisplay;
 import java.util.Objects;
 
+/** Application use case: toggles health visibility. */
 public final class ToggleHealthCommand implements Command {
     private final HealthDisplay display;
 

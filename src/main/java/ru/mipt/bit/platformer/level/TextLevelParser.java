@@ -4,6 +4,7 @@ import ru.mipt.bit.platformer.model.*;
 import java.io.*;
 import java.util.*;
 
+/** Infrastructure: converts the text file format to domain level data. */
 public final class TextLevelParser {
     public LevelData parse(Reader input) throws IOException {
         BufferedReader reader = new BufferedReader(input);

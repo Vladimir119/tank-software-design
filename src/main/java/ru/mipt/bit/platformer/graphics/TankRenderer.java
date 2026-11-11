@@ -12,6 +12,7 @@ import ru.mipt.bit.platformer.util.TileMovement;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
+/** Infrastructure: LibGDX drawing of a tank. */
 public final class TankRenderer implements AutoCloseable {
     private final Texture texture;
     private final TextureRegion image;

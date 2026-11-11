@@ -2,6 +2,7 @@ package ru.mipt.bit.platformer.model;
 
 import java.util.Objects;
 
+/** Domain entity: projectile movement and damage. */
 public final class Bullet implements GameObject {
     private Cell position;
     private final Direction direction;
@@ -22,7 +23,7 @@ public final class Bullet implements GameObject {
     }
 
     @Override
-    public void live(float delta, GameWorld world) {
+    public void live(float delta, WorldAccess world) {
         if (!Float.isFinite(delta) || delta < 0) throw new IllegalArgumentException("Invalid delta");
         if (!world.contains(this) || world.collide(this)) return;
         elapsed += delta;

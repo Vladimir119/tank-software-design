@@ -1,7 +1,8 @@
 package ru.mipt.bit.platformer;
 
+import ru.mipt.bit.platformer.application.port.LevelSource;
+import ru.mipt.bit.platformer.application.port.GameView;
 import org.junit.jupiter.api.Test;
-import ru.mipt.bit.platformer.graphics.GameView;
 import ru.mipt.bit.platformer.level.*;
 import ru.mipt.bit.platformer.model.*;
 import java.util.*;

@@ -1,10 +1,12 @@
 package ru.mipt.bit.platformer.input;
 
+import ru.mipt.bit.platformer.application.port.ControlStrategy;
 import ru.mipt.bit.platformer.model.*;
 import java.util.Objects;
 import java.util.Random;
 import java.util.List;
 
+/** Infrastructure input adapter: maps random AI choices to commands. */
 public final class RandomController implements ControlStrategy {
     private final Tank tank;
     private final Random random;

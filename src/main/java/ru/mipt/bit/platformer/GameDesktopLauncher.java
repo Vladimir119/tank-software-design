@@ -1,5 +1,8 @@
 package ru.mipt.bit.platformer;
 
+import ru.mipt.bit.platformer.application.port.LevelSource;
+import ru.mipt.bit.platformer.application.port.ControlStrategy;
+import ru.mipt.bit.platformer.application.port.GameView;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
@@ -12,6 +15,7 @@ import ru.mipt.bit.platformer.model.*;
 import java.util.*;
 import static com.badlogic.gdx.Input.Keys.*;
 
+/** Infrastructure: composition root and LibGDX lifecycle adapter. */
 public final class GameDesktopLauncher extends ApplicationAdapter {
     private final LevelSource levels;
     private final float moveDuration;

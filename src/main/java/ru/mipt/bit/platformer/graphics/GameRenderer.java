@@ -1,5 +1,6 @@
 package ru.mipt.bit.platformer.graphics;
 
+import ru.mipt.bit.platformer.application.port.GameView;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +17,7 @@ import ru.mipt.bit.platformer.model.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
+/** Infrastructure output adapter: implements GameView using LibGDX. */
 public final class GameRenderer implements GameView {
     private final SpriteBatch batch = new SpriteBatch();
     private final TiledMap map;

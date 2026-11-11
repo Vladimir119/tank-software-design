@@ -4,6 +4,7 @@ import ru.mipt.bit.platformer.model.Cell;
 import ru.mipt.bit.platformer.model.Field;
 import java.util.Objects;
 
+/** Domain: initial field and player position. */
 public record LevelData(Field field, Cell spawn) {
     public LevelData {
         Objects.requireNonNull(field);

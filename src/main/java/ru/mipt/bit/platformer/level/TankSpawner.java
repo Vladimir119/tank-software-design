@@ -3,6 +3,7 @@ package ru.mipt.bit.platformer.level;
 import ru.mipt.bit.platformer.model.*;
 import java.util.*;
 
+/** Domain service: places tanks on free cells. */
 public final class TankSpawner {
     private final Random random;
 

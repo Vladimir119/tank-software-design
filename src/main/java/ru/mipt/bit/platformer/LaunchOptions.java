@@ -1,9 +1,11 @@
 package ru.mipt.bit.platformer;
 
+import ru.mipt.bit.platformer.application.port.LevelSource;
 import ru.mipt.bit.platformer.level.*;
 import java.nio.file.Path;
 import java.util.Random;
 
+/** Infrastructure: command-line adapter selecting the level source. */
 public record LaunchOptions(Path levelFile, Long seed, int trees) {
     public static LaunchOptions parse(String[] args) {
         Path file = null;

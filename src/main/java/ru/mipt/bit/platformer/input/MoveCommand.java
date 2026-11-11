@@ -3,6 +3,7 @@ package ru.mipt.bit.platformer.input;
 import ru.mipt.bit.platformer.model.*;
 import java.util.Objects;
 
+/** Application use case: requests tank movement. */
 public final class MoveCommand implements Command {
     private final Tank tank;
     private final Direction direction;

@@ -1,5 +1,6 @@
 package ru.mipt.bit.platformer.model;
 
+/** Application state: visibility of the health overlay. */
 public final class HealthDisplay {
     private boolean visible;
 

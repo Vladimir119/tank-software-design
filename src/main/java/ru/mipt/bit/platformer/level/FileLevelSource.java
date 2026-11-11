@@ -1,10 +1,12 @@
 package ru.mipt.bit.platformer.level;
 
+import ru.mipt.bit.platformer.application.port.LevelSource;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.Objects;
 
+/** Infrastructure output adapter: reads a level from the file system. */
 public final class FileLevelSource implements LevelSource {
     private final Path path;
     private final TextLevelParser parser;

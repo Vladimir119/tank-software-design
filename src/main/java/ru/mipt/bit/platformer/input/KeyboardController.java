@@ -1,8 +1,10 @@
 package ru.mipt.bit.platformer.input;
 
+import ru.mipt.bit.platformer.application.port.ControlStrategy;
 import java.util.*;
 import java.util.function.IntPredicate;
 
+/** Infrastructure input adapter: maps key states to commands. */
 public final class KeyboardController implements ControlStrategy {
     private final IntPredicate pressed;
     private final Map<Integer, Command> bindings = new LinkedHashMap<>();

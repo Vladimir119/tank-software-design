@@ -1,5 +1,6 @@
 package ru.mipt.bit.platformer.model;
 
+/** Domain value: grid direction and orientation. */
 public enum Direction {
     UP(0, 1, 90), LEFT(-1, 0, -180), DOWN(0, -1, -90), RIGHT(1, 0, 0);
 

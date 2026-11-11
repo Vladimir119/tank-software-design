@@ -1,5 +1,7 @@
 package ru.mipt.bit.platformer;
 
+import ru.mipt.bit.platformer.application.port.ControlStrategy;
+import ru.mipt.bit.platformer.application.port.GameView;
 import org.junit.jupiter.api.Test;
 import ru.mipt.bit.platformer.graphics.*;
 import ru.mipt.bit.platformer.input.*;

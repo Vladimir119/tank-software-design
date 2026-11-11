@@ -1,8 +1,10 @@
 package ru.mipt.bit.platformer.level;
 
+import ru.mipt.bit.platformer.application.port.LevelSource;
 import ru.mipt.bit.platformer.model.*;
 import java.util.*;
 
+/** Infrastructure output adapter: supplies a randomly generated level. */
 public final class RandomLevelSource implements LevelSource {
     private final int width;
     private final int height;
